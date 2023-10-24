@@ -24,8 +24,24 @@ public class BasicMathServiceTest {
                 Arguments.of("5", "10", "15"),
                 Arguments.of("0", "0", "0"),
                 Arguments.of("0", "55", "55"),
+                Arguments.of("-50", "-40", "-90"),
+                Arguments.of("2.5", "4.5", "7"),
+                Arguments.of("3.2", "4.4", "7.6"),
+                Arguments.of("", "55", Exception.class),
+                Arguments.of("five", "55", Exception.class),
+                Arguments.of("50", "potato", Exception.class),
+                Arguments.of("0.000000000000001", "0.999999999999999", "1"),
+                Arguments.of("0", "55", "55"),
                 Arguments.of("25", "0", "25"),
-                Arguments.of("2000000000", "2000000000", "4000000000")
+                Arguments.of("-25", "12", "-13"),
+                Arguments.of("25", "-12", "13"),
+                Arguments.of("2000000000", "2000000000", "4000000000"),
+                Arguments.of("2000000000000000000000000000", "2000000000000000000000000000", "4000000000000000000000000000"),
+                Arguments.of(
+                        "2000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                        "2000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                        "4000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+                )
         );
     }
 
@@ -64,9 +80,15 @@ public class BasicMathServiceTest {
 
     @ParameterizedTest
     @MethodSource("mathAddData")
-    public void testBasicAddition(String n1, String n2, String result) {
-        String res = basicMathService.add(n1, n2);
-        Assertions.assertEquals(result, res);
+    public void testBasicAddition(String n1, String n2, Object expectedResult) {
+        if (expectedResult instanceof String) {
+            String res = basicMathService.add(n1, n2);
+            Assertions.assertEquals(expectedResult, res);
+        } else if (expectedResult instanceof Class && Exception.class.isAssignableFrom((Class<?>) expectedResult)){
+            Assertions.assertThrows((Class<? extends Exception>) expectedResult, () -> basicMathService.add(n1, n2));
+        } else {
+            Assertions.fail();
+        }
     }
 
     @ParameterizedTest
@@ -87,9 +109,9 @@ public class BasicMathServiceTest {
     @MethodSource("mathDivideData")
     public void testBasicDivision(String n1, String n2, Object result) {
         if (result instanceof String) {
-            Object res = basicMathService.divide(n1, n2);
+            String res = basicMathService.divide(n1, n2);
             Assertions.assertEquals(res, result);
-        } else if (result instanceof Exception){
+        } else if (result instanceof Class && Exception.class.isAssignableFrom((Class<?>) result)){
             Assertions.assertThrows((Class<? extends Exception>) result, () -> basicMathService.divide(n1, n2));
         } else {
             Assertions.fail();
