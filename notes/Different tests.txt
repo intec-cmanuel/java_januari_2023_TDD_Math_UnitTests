@@ -1,0 +1,63 @@
+======================= NOTES ===========================
+
+Test-Driven Development:
+    - Write your tests first.
+    - Use test to check if our code is correct.
+    - Very useful for great project.
+
+Unit Testing:
+    - Per methode testing
+    - Testing addBook;      // test 1
+    - Testing deleteBook;   // test 2
+    - Testing getBook;      // test 3
+    - Test services
+    - Test controllers
+    - Test repositories
+    - Test aspects
+    - Test c.postBook(Book book);
+    - Test s.addBook(Book book);
+    - Test r.saveBook(Book book);
+
+Integrated Testing:
+    - Test a functionality
+    - Test testAddingBookToDB:
+        - Test c.postBook + s.addBook + r.saveBook
+    - Test testReadingBookFromDB:
+        - Test c.getBook + s.getBook + r.findById
+
+
+Behavioural Testing:
+    - Test a scenario
+    - Test multiple functionalities that go together
+    - I want to add a book to the database AND THEN view the book/books from the database;
+    - I want to buy something:                              // Behavioural test
+        - I want to see the books                               // Integrated test
+        - I want to add a book to the cart                      // Integrated test
+        - I want to pay for items in the cart                   // Integrated test
+        - I want to print the receipt (download pdf)            // Integrated test
+
+UNIT TESTING: no links
+INTEGRATED TESTING: links between units
+BEHAVIOURAL TESTING: links between integrations
+
+
+==================== DEMO CLASSES =======================
+
+public interface BookController {
+    void postBook(@RequestBody Book book);
+}
+
+public interface BookService {
+    void addBook(Book book);
+    void deleteBook(Book book);
+    Book getBook(long id);
+}
+
+public interface BookRepository {
+    void save(Book book);
+}
+
+public class Book {
+    long id;
+    String name;
+}
